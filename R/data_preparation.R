@@ -1,9 +1,9 @@
 prepare_dig_data <- function(dig) {
-        # Use the Assignment 4 variables, excluding KLEVEL.
+        # Use the Assignment 4 variables
         required_cols <- c(
             "ID", "TRTMT", "AGE", "SEX", "BMI", "CREAT", "DIABP", "SYSBP",
             "HYPERTEN", "CVD", "WHF", "DIG", "HOSP", "HOSPDAYS",
-            "DEATH", "DEATHDAY"
+            "DEATH", "DEATHDAY","KLEVEL"
         )
         
         missing_cols <- setdiff(required_cols, names(dig))
@@ -26,6 +26,11 @@ prepare_dig_data <- function(dig) {
             CREAT = as.numeric(CREAT),
             DIABP = as.numeric(DIABP),
             SYSBP = as.numeric(SYSBP),
+            
+            # Replacing extreme K value with NA
+            KLEVEL = as.numeric(KLEVEL),
+            KLEVEL = ifelse(ID == 940,NA_real_,KLEVEL),
+            
             HYPERTEN = factor(HYPERTEN, levels = c(0, 1),
                               labels = c("No", "Yes")),
             CVD = factor(CVD, levels = c(0, 1),
@@ -42,6 +47,7 @@ prepare_dig_data <- function(dig) {
             DEATHDAY = as.numeric(DEATHDAY),
             Month = round(DEATHDAY / 30)
         )
+       
         
         return(dig)
     }
