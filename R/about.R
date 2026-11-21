@@ -2,15 +2,15 @@ aboutUI <- function(){
     tagList(
         h2("About & Data"),
         
-        reactable::reactableOutput("table")
+        reactableOutput("table")
     )
 }
 
 # About Server
 aboutServer <- function(output,data) {
     
-    output$table <- reactable::renderReactable({
-        reactable::reactable(
+    output$table <- renderReactable({
+        reactable(
             data,
             searchable = TRUE,
             filterable = TRUE,
