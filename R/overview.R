@@ -6,6 +6,7 @@ overviewUI <- function() {
             box(
                 width = 3,
                 div(
+                    class="kpi-card",
                     style = "text-align: center;",
                     h3(icon("users"), " ",
                        textOutput("total_patients", inline = TRUE)),
