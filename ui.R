@@ -18,7 +18,7 @@ ui <- dashboardPage(skin='black',
     
     dashboardBody(
         tabItems(
-            tabItem(tabName = "overview", h2("Overview")),
+            tabItem(tabName = "overview", overviewUI()),
             tabItem(tabName = "patients", h2("Patient Profile")),
             tabItem(tabName = "outcomes", h2("Treatment Outcomes")),
             tabItem(tabName = "survival", h2("Survival Analysis")),
