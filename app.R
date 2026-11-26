@@ -3,6 +3,7 @@ library(shinydashboard)
 library(ggplot2)
 library(dplyr)
 library(reactable)
+library(plotly)
 
 # 1. Load data preparation function
 source("R/data_preparation.R")
