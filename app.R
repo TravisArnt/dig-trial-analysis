@@ -15,6 +15,7 @@ cleaned_dig <- prepare_dig_data(raw_dig)
 # 3. Load modules
 source("R/about.R")
 source("R/overview.R")
+source("R/outcomes.R")
 # Later:
 
 # source("R/patients.R")
