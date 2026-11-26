@@ -20,7 +20,7 @@ ui <- dashboardPage(skin='black',
         tabItems(
             tabItem(tabName = "overview", overviewUI()),
             tabItem(tabName = "patients", h2("Patient Profile")),
-            tabItem(tabName = "outcomes", h2("Treatment Outcomes")),
+            tabItem(tabName = "outcomes", outcomesUI()),
             tabItem(tabName = "survival", h2("Survival Analysis")),
             tabItem(tabName="about",aboutUI())
         )
