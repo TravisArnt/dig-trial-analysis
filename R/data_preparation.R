@@ -36,8 +36,15 @@ prepare_dig_data <- function(dig) {
                 levels = c(1, 2),
                 labels = c("Male", "Female")
             ),
-            
+            # BMI Categories
             BMI = as.numeric(BMI),
+            BMI_categories = cut(
+                BMI,
+                breaks = C(-Inf, 18.5, 25, 30, Inf),
+                labels = c("underweight", "Normal", "Overweight", "Obesity"),
+                right = FALSE
+            ),
+            
             CREAT = as.numeric(CREAT),
             DIABP = as.numeric(DIABP),
             SYSBP = as.numeric(SYSBP),
