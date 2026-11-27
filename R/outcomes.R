@@ -1,3 +1,5 @@
+
+
 outcomesUI <- function() {
     tagList(
         h2("Treatment Outcomes"),
@@ -56,8 +58,13 @@ outcomesUI <- function() {
             ),
             box(
                 title = "Outcomes Across Subgroups",
-                widh = 6,
+                width = 6,
                 plotlyOutput("outcome_subgroup_plot", height = "350px")
+            ),
+            box(
+                title = "Treatment Comparison",
+                width = 12,
+                reactableOutput("comparison_table")
             )
         )
     )
@@ -152,4 +159,26 @@ outcomesServer <- function(input,output,session, data) {
             theme_minimal()
         ggplotly(plot_out)
     })
+    
+    # Treatment Comparison table
+    outcome_labels = c("Cardiovascular Disease Hospitalization" = "CVD", "Worsening Heart Failure Hospitalization" = "WHF",
+                                 "Digoxin Toxicity Hospitalization" = "DIG", "Hospitalization" = "HOSP", "Death" = "DEATH")
+    
+    
+    output$comparison_table <- renderReactable({
+        df <- outcome_summary()
+        dig <- df %>% filter(TRTMT == "Digoxin")
+        placebo <- df %>% filter(TRTMT == "Placebo")
+        
+        table_df <- data.frame(
+            Outcome    = names(outcome_labels)[outcome_labels == input$outcome_],
+            Digoxin    = paste0(dig$n_events, " / ", dig$n_total, " (", round(dig$rate,1), "%)"),
+            Placebo    = paste0(placebo$n_events, " / ", placebo$n_total, " (", round(placebo$rate,1), "%)"),
+            Difference = round(dig$rate - placebo$rate,1)
+    )
+        reactable(table_df)
+        })
+    
+    
+    
 }
