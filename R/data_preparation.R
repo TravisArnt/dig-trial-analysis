@@ -40,7 +40,7 @@ prepare_dig_data <- function(dig) {
             BMI = as.numeric(BMI),
             BMI_categories = cut(
                 BMI,
-                breaks = C(-Inf, 18.5, 25, 30, Inf),
+                breaks = c(-Inf, 18.5, 25, 30, Inf),
                 labels = c("underweight", "Normal", "Overweight", "Obesity"),
                 right = FALSE
             ),

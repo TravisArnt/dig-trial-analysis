@@ -28,6 +28,20 @@ outcomesUI <- function() {
                             ),
                             width = "100%"
                         )
+                    ),
+                    
+                    column(
+                        width = 3,
+                        selectInput(
+                            "sub_groups",
+                            "Subgroup",
+                            choices = c(
+                                "Sex" = "SEX",
+                                "Hypertension" = "HYPERTEN",
+                                "BMI" = "BMI_categories"
+                            ),
+                            width = "100%"
+                        )
                     )
                 )
             )
@@ -37,8 +51,13 @@ outcomesUI <- function() {
         fluidRow(
             box(
                 title = "Outcomes by Treatment",
-                width = 8,
+                width = 6,
                 plotlyOutput("outcome_treatment_plot", height = "350px")
+            ),
+            box(
+                title = "Outcomes Across Subgroups",
+                widh = 6,
+                plotlyOutput("outcome_subgroup_plot", height = "350px")
             )
         )
     )
@@ -65,6 +84,50 @@ outcomesServer <- function(input,output,session, data) {
                 rate = n_events / n_total * 100,
                 TRTMT = recode(TRTMT, "Treatment" = "Digoxin")
     )})
+    
+    # Outcomes by Subgroups
+    subgroup_summary <- reactive({
+        req(input$outcome_, input$sub_groups)
+        
+        var <- input$outcome_
+        sub_var <- input$sub_groups
+        event_level <- if (var =="DEATH") "Death" else "Yes"
+        
+        data %>%
+            filter(!is.na(.data[[sub_var]])) %>%
+            group_by(Subgroup = .data[[sub_var]], TRTMT) %>%
+            summarise(
+                n_total = n(),
+                n_events = sum(.data[[var]] == event_level, na.rm = TRUE)
+            ) %>%
+            mutate(
+                rate = n_events / n_total * 100,
+                TRTMT = recode(TRTMT, "Treatment" = "Digoxin")
+            )})
+    
+    # Outcomes by Subgroups Plot
+    output$outcome_subgroup_plot <- renderPlotly({
+        df <- subgroup_summary()
+        
+        if (input$event_num == "rate") {
+            df$value <- df$rate
+            y_lab <- "Event rate (%)"
+        } else{
+            df$value <- df$n_events
+            y_lab <- "Number of Patients"} 
+    
+    
+    plot_sub <- ggplot(df,
+                aes(x = Subgroup, y = value, fill = TRTMT)) + 
+            geom_col(position = "dodge") +
+            labs(
+                x = NULL,
+                y = y_lab,
+                fill = "Treatment"
+            ) +
+            theme_minimal()
+        ggplotly(plot_sub)
+    })
     
     
     # Outcome by treatment plot

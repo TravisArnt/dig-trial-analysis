@@ -28,4 +28,3 @@ server <- source("server.R", local = TRUE)$value
 
 # 5. Run Shiny app
 shinyApp(ui, server)
-
